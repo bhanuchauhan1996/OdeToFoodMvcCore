@@ -5,16 +5,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OdeToFoodMvc.Models;
+using OdeToFoodMvc.ViewModels;
 
 namespace OdeToFoodMvc.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IPieRepository _pieRepository;
+
+        public HomeController(IPieRepository pieRepository)
         {
-            return View();
+            _pieRepository = pieRepository;
         }
 
+        public IActionResult Index()
+        {
+            var homeViewModel = new HomeViewModel
+            {
+                PiesOfTheWeek = _pieRepository.PiesOfWeek
+            };
+
+            return View(homeViewModel);
+        }
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
